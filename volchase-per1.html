@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VolChase — Turn Volume Into Victory | Per 1</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0A0A0A;
+    --surface:   #111111;
+    --raised:    #1A1A1A;
+    --accent:    #6C3BFF;
+    --accent-h:  #5A2EE0;
+    --text:      #F5F5F5;
+    --muted:     #888888;
+    --border:    #222222;
+    --success:   #22C55E;
+    --gold:      #FFD166;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-size: 18px; font-weight: 700; letter-spacing: -0.5px; color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 14px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--accent); color: #fff;
+    padding: 8px 20px; border-radius: 4px; font-size: 14px;
+    font-weight: 600; text-decoration: none; transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent-h); }
+
+  /* SECTIONS */
+  section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+  .full-width { max-width: 100%; padding-left: 0; padding-right: 0; }
+
+  /* HERO */
+  .hero-wrap {
+    padding-top: 160px; padding-bottom: 100px;
+    text-align: center; max-width: 800px; margin: 0 auto;
+  }
+  .hero-label {
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 24px; display: block;
+  }
+  .hero-title {
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -2px; margin-bottom: 24px;
+  }
+  .hero-title em { font-style: normal; color: var(--accent); }
+  .hero-sub {
+    font-size: 18px; color: var(--muted); max-width: 520px;
+    margin: 0 auto 40px; line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    padding: 14px 32px; border-radius: 4px; font-size: 15px;
+    font-weight: 600; text-decoration: none; transition: background 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent-h); }
+  .btn-ghost {
+    border: 1px solid var(--border); color: var(--text);
+    padding: 14px 32px; border-radius: 4px; font-size: 15px;
+    text-decoration: none; transition: border-color 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--muted); }
+
+  /* STATS BAR */
+  .stats-bar {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    padding: 32px 40px;
+    display: flex; justify-content: center; gap: 80px; flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-size: 36px; font-weight: 800;
+    letter-spacing: -1px; color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-num span { color: var(--success); }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  /* SECTION HEADERS */
+  .section-label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px; display: block;
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px); font-weight: 700;
+    letter-spacing: -1px; margin-bottom: 16px; line-height: 1.1;
+  }
+  .section-sub { color: var(--muted); max-width: 480px; line-height: 1.7; }
+
+  /* HOW IT WORKS */
+  .steps {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px; background: var(--border); margin-top: 60px;
+    border: 1px solid var(--border);
+  }
+  .step {
+    background: var(--surface); padding: 40px 32px;
+    position: relative;
+  }
+  .step-num {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px; display: block;
+  }
+  .step h3 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+  .step p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* VALUE PROPS */
+  .props {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px; background: var(--border); margin-top: 60px;
+    border: 1px solid var(--border);
+  }
+  .prop { background: var(--surface); padding: 40px 32px; }
+  .prop-icon { font-size: 28px; margin-bottom: 20px; display: block; }
+  .prop h3 { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+  .prop p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* LEADERBOARD PREVIEW */
+  .leaderboard {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 4px; overflow: hidden; margin-top: 60px;
+  }
+  .lb-header {
+    padding: 16px 24px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .lb-title { font-size: 13px; font-weight: 600; }
+  .lb-live {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; color: var(--success); text-transform: uppercase; letter-spacing: 1px;
+  }
+  .lb-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .lb-row {
+    padding: 16px 24px; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 40px 1fr 120px 120px;
+    align-items: center; gap: 16px;
+    transition: background 0.15s;
+  }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-row:hover { background: var(--raised); }
+  .lb-rank {
+    font-size: 13px; font-weight: 700;
+    font-variant-numeric: tabular-nums; color: var(--muted);
+  }
+  .lb-rank.top { color: var(--gold); }
+  .lb-addr { font-size: 13px; font-family: 'Courier New', monospace; color: var(--muted); }
+  .lb-vol { font-size: 13px; font-weight: 600; text-align: right; }
+  .lb-reward { font-size: 13px; font-weight: 700; color: var(--success); text-align: right; }
+
+  /* CAMPAIGNS */
+  .campaigns {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px; background: var(--border); margin-top: 60px;
+    border: 1px solid var(--border);
+  }
+  .campaign { background: var(--surface); padding: 32px; }
+  .campaign-pair {
+    font-size: 20px; font-weight: 700; margin-bottom: 8px;
+  }
+  .campaign-exchange { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
+  .campaign-pool {
+    font-size: 32px; font-weight: 800; letter-spacing: -1px;
+    color: var(--gold); margin-bottom: 4px;
+  }
+  .campaign-pool-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
+  .campaign-timer {
+    font-size: 13px; color: var(--muted); margin-bottom: 24px;
+    font-variant-numeric: tabular-nums;
+  }
+  .campaign-timer span { color: var(--text); font-weight: 600; }
+  .campaign-join {
+    display: block; text-align: center;
+    background: var(--accent); color: #fff;
+    padding: 12px; border-radius: 4px; font-size: 14px;
+    font-weight: 600; text-decoration: none; transition: background 0.2s;
+  }
+  .campaign-join:hover { background: var(--accent-h); }
+
+  /* EXCHANGES */
+  .exchanges-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px; background: var(--surface);
+  }
+  .exchanges-label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); text-align: center; margin-bottom: 32px;
+  }
+  .exchanges-logos {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    align-items: center; gap: 40px;
+  }
+  .exchange-pill {
+    background: var(--raised); border: 1px solid var(--border);
+    padding: 10px 24px; border-radius: 4px;
+    font-size: 13px; font-weight: 600; color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  /* FOR ISSUERS */
+  .issuer-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--border); margin-top: 60px;
+    border: 1px solid var(--border);
+  }
+  .issuer-item { background: var(--surface); padding: 40px 32px; }
+  .issuer-item h3 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+  .issuer-item p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* FAQ */
+  .faq-list { margin-top: 60px; border: 1px solid var(--border); }
+  .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    padding: 24px 32px; font-size: 15px; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  }
+  .faq-q:hover { background: var(--raised); }
+  .faq-icon { color: var(--accent); font-size: 20px; font-weight: 300; }
+  .faq-a {
+    padding: 0 32px 24px; font-size: 14px; color: var(--muted); line-height: 1.7;
+  }
+
+  /* FOOTER CTA */
+  .footer-cta {
+    text-align: center; padding: 100px 40px;
+    border-top: 1px solid var(--border);
+  }
+  .footer-cta h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; }
+  .footer-cta p { color: var(--muted); margin-bottom: 40px; font-size: 16px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 48px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 24px; max-width: 100%;
+  }
+  .footer-logo { font-size: 16px; font-weight: 700; }
+  .footer-logo span { color: var(--accent); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  .footer-links a:hover { color: var(--text); }
+  .footer-social { display: flex; gap: 16px; }
+  .social-btn {
+    width: 36px; height: 36px; border: 1px solid var(--border);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--muted); text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .social-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* PERSPECTIVE TAG */
+  .per-tag {
+    position: fixed; bottom: 24px; right: 24px; z-index: 200;
+    background: var(--raised); border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 4px;
+    font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase;
+  }
+  .per-tag span { color: var(--accent); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>Vol</span>Chase</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#campaigns">Campaigns</a></li>
+    <li><a href="#partners">Partners</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a class="nav-cta" href="#">Race now</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero-wrap">
+  <span class="hero-label">Volume-based trading competitions</span>
+  <h1 class="hero-title">Turn Volume<br>Into <em>Victory</em></h1>
+  <p class="hero-sub">Compete with traders on top CEXs. Climb the leaderboard. Earn USDT daily from the prize pool.</p>
+  <div class="hero-actions">
+    <a class="btn-primary" href="#">Race now</a>
+    <a class="btn-ghost" href="#">Become a partner</a>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">$<span>104M</span></div>
+    <div class="stat-label">CEX volume traded</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">$<span>275K</span></div>
+    <div class="stat-label">Rewards distributed</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num"><span>11</span></div>
+    <div class="stat-label">Supported exchanges</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num"><span>Daily</span></div>
+    <div class="stat-label">New campaigns</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <span class="section-label">Process</span>
+  <h2 class="section-title">Four steps.<br>One race.</h2>
+  <p class="section-sub">Connect once. Trade what you already trade. Earn from the prize pool — daily.</p>
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">01</span>
+      <h3>Connect your account</h3>
+      <p>Link your blockchain address and CEX accounts. Read-only API key. We see your volume — nothing else.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <h3>Pick a campaign</h3>
+      <p>Choose a live campaign. Each one has a specific token pair, exchange, and prize pool. Rules are clear upfront.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <h3>Trade and climb</h3>
+      <p>Volume = rank. Rank = rewards. Trade through VolChase — only counted trades score on the leaderboard.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <h3>Earn daily</h3>
+      <p>Rewards sent automatically to your wallet on Arbitrum One within 24 hours after each epoch ends.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE PROPS -->
+<section>
+  <span class="section-label">Why VolChase</span>
+  <h2 class="section-title">Trade. Compete. Earn.</h2>
+  <div class="props">
+    <div class="prop">
+      <span class="prop-icon">⚡</span>
+      <h3>Seamless across CEXs</h3>
+      <p>Connect Binance, Bybit, OKX, Kraken and more. One leaderboard. All your volume counts.</p>
+    </div>
+    <div class="prop">
+      <span class="prop-icon">🏆</span>
+      <h3>Public leaderboard</h3>
+      <p>Your rank is visible. Your volume is verifiable. Competition is real — same rules for everyone, no exceptions.</p>
+    </div>
+    <div class="prop">
+      <span class="prop-icon">🔗</span>
+      <h3>On-chain rewards</h3>
+      <p>Transparent distribution. Verifiable on-chain. Rewards come from the prize pool, not from your trades.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERBOARD PREVIEW -->
+<section id="campaigns">
+  <span class="section-label">Live now</span>
+  <h2 class="section-title">The race is live.</h2>
+  <p class="section-sub">Rankings update in real time. 18 hours left in this epoch.</p>
+  <div class="leaderboard">
+    <div class="lb-header">
+      <span class="lb-title">BTCUSDT — Bybit — $5,000 prize pool</span>
+      <span class="lb-live"><span class="lb-dot"></span> Live</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank top">#1</span>
+      <span class="lb-addr">0x2A...4F67</span>
+      <span class="lb-vol">$1,657,320</span>
+      <span class="lb-reward">$847</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank top">#2</span>
+      <span class="lb-addr">0x3B...9E21</span>
+      <span class="lb-vol">$1,204,880</span>
+      <span class="lb-reward">$512</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank top">#3</span>
+      <span class="lb-addr">0x1C...2D78</span>
+      <span class="lb-vol">$987,440</span>
+      <span class="lb-reward">$320</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank">#4</span>
+      <span class="lb-addr">0x4D...6A33</span>
+      <span class="lb-vol">$654,100</span>
+      <span class="lb-reward">$154</span>
+    </div>
+    <div class="lb-row">
+      <span class="lb-rank">#5</span>
+      <span class="lb-addr">0x7E...1B90</span>
+      <span class="lb-vol">$521,770</span>
+      <span class="lb-reward">$98</span>
+    </div>
+  </div>
+
+  <!-- CAMPAIGN CARDS -->
+  <div class="campaigns" style="margin-top:40px">
+    <div class="campaign">
+      <div class="campaign-pair">BTCUSDT</div>
+      <div class="campaign-exchange">Bybit</div>
+      <div class="campaign-pool">$5,000</div>
+      <div class="campaign-pool-label">Prize pool</div>
+      <div class="campaign-timer">Ends in <span>18h 24m</span></div>
+      <a class="campaign-join" href="#">Join campaign</a>
+    </div>
+    <div class="campaign">
+      <div class="campaign-pair">ETHUSDT</div>
+      <div class="campaign-exchange">Binance</div>
+      <div class="campaign-pool">$3,200</div>
+      <div class="campaign-pool-label">Prize pool</div>
+      <div class="campaign-timer">Ends in <span>06h 11m</span></div>
+      <a class="campaign-join" href="#">Join campaign</a>
+    </div>
+    <div class="campaign">
+      <div class="campaign-pair">SOLUSDT</div>
+      <div class="campaign-exchange">OKX</div>
+      <div class="campaign-pool">$1,800</div>
+      <div class="campaign-pool-label">Prize pool</div>
+      <div class="campaign-timer">Ends in <span>22h 47m</span></div>
+      <a class="campaign-join" href="#">Join campaign</a>
+    </div>
+  </div>
+</section>
+
+<!-- EXCHANGES -->
+<div class="exchanges-wrap">
+  <div class="exchanges-label">Supported exchanges</div>
+  <div class="exchanges-logos">
+    <span class="exchange-pill">Binance</span>
+    <span class="exchange-pill">Bybit</span>
+    <span class="exchange-pill">OKX</span>
+    <span class="exchange-pill">Kraken</span>
+    <span class="exchange-pill">KuCoin</span>
+    <span class="exchange-pill">Gate.io</span>
+    <span class="exchange-pill">Bitget</span>
+    <span class="exchange-pill">MEXC</span>
+    <span class="exchange-pill">Crypto.com</span>
+  </div>
+</div>
+
+<!-- FOR TOKEN ISSUERS -->
+<section id="partners">
+  <span class="section-label">For token issuers</span>
+  <h2 class="section-title">Run your own race.</h2>
+  <p class="section-sub">Set the prize pool. We run the leaderboard, verify volume, and distribute rewards on-chain. Your community generates volume. You get the data.</p>
+  <div class="issuer-grid">
+    <div class="issuer-item">
+      <h3>New reward distribution</h3>
+      <p>A new way to distribute your token that directly impacts CEX volume — not just airdrop farming.</p>
+    </div>
+    <div class="issuer-item">
+      <h3>Amplify announcements</h3>
+      <p>Boost the impact of CEX listings, product launches, and KOL campaigns with real volume competition.</p>
+    </div>
+    <div class="issuer-item">
+      <h3>Maintain steady volume</h3>
+      <p>Allocate marketing budgets to sustain consistent CEX volume between major announcements.</p>
+    </div>
+    <div class="issuer-item">
+      <h3>Prevent CEX delistings</h3>
+      <p>Hit volume targets. Stay listed. VolChase campaigns have kept tokens active on major exchanges.</p>
+    </div>
+  </div>
+  <div style="margin-top:40px; text-align:center">
+    <a class="btn-primary" href="#">Let's talk →</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <span class="section-label">FAQ</span>
+  <h2 class="section-title">Straight answers.</h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">What is VolChase? <span class="faq-icon">+</span></div>
+      <div class="faq-a">VolChase is a live trading competition platform. Connect your CEX account, join a campaign, and race other traders on volume. Top ranks earn from the prize pool — daily.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is my exchange account safe? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes. Read-only API key only. We see your trading volume — we touch nothing else. Your funds stay on your exchange, under your control.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How does ranking work? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Volume = rank. We track the trading volume of the specified token pair on your connected exchange. The more you trade, the higher your rank. Transparent, on-chain verifiable, manipulation-resistant.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do I claim rewards? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Rewards are sent automatically to your DeFi wallet address on Arbitrum One within 24 hours after each epoch ends. No manual claim needed.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Which exchanges are supported? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Binance, Bybit, OKX, Kraken, KuCoin, Gate.io, Bitget, MEXC, Crypto.com, Coinbase, and Huobi/HTX. New exchanges added regularly.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<div class="footer-cta">
+  <h2>The race is live.<br>Your move.</h2>
+  <p>Connect your account. Join a campaign. Climb the leaderboard.</p>
+  <a class="btn-primary" href="#">Race now →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>Vol</span>Chase</div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="#">Careers</a>
+    <a href="#">Partners</a>
+    <a href="#">Docs</a>
+  </div>
+  <div class="footer-social">
+    <a class="social-btn" href="#">𝕏</a>
+    <a class="social-btn" href="#">▶</a>
+    <a class="social-btn" href="#">💬</a>
+  </div>
+</footer>
+
+<!-- PERSPECTIVE TAG -->
+<div class="per-tag">Perspective <span>01</span> — Cedehub DNA</div>
+
+</body>
+</html>
